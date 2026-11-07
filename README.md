@@ -11,6 +11,15 @@ decide where they want to participate and which areas they would rather avoid.
 **[Read the DemoLogic project](https://github.com/demo-radar/demo-radar-logic)** ·
 **[See the architecture](docs/architecture.md)**
 
+[![Demo Radar's desktop map of Berlin with demonstration markers, a cluster, date and status filters, the daily briefing button, and an event list with topic tags.](assets/demo-radar-overview.jpg)](https://demo-radar.com)
+
+*The public application, captured on 7 November 2026 with 8 November selected.
+Open the live map to explore current records.*
+
+Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright);
+tiles by [OpenStreetMap.de](https://www.openstreetmap.de/).
+Assembly records: [Berlin's assembly authority](https://www.berlin.de/polizei/service/versammlungsbehoerde/versammlungen-aufzuege/).
+
 ## Why I built it
 
 Public records can be available without being easy to use. A long list of
