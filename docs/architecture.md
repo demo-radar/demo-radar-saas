@@ -11,8 +11,7 @@ flowchart TB
     Mapping[Mapping and routing services] --> Import
     Import --> Data[(Event and geospatial data)]
     Data -->|Read selected fields| Jobs[Demo Radar backend jobs]
-    Jobs -->|Request| Logic[DemoLogic AI service]
-    Logic -->|Result| Jobs
+    Jobs <-->|Request and result| Logic[DemoLogic AI service]
     Jobs -->|Save suggestions and drafts| Data
     Data -->|Read saved work| Staff[Authorized staff review]
     Staff -->|Save decisions| Data
