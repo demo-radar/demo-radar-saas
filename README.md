@@ -11,9 +11,9 @@ decide where they want to participate and which areas they would rather avoid.
 **[Read the DemoLogic project](https://github.com/demo-radar/demo-radar-logic)** ·
 **[See the architecture](docs/architecture.md)**
 
-[![Demo Radar's map of Berlin showing a veganism and animal rights demonstration, its location, and topic tag.](assets/demo-radar-overview.jpg)](https://demo-radar.com)
+[![Demo Radar's map of Berlin showing demonstration routes, markers and an event list with topic tags.](assets/demo-radar-overview.jpg)](https://demo-radar.com)
 
-*The public application, captured on 7 November 2026 with 8 November selected and the topic filter applied.
+*The public application, captured on 7 November 2026 with 11 November selected.
 Open the live map to explore current records.*
 
 Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright);
