@@ -80,8 +80,8 @@ the model to repeat work for matching events.
 
 As of 7 November 2026, **tags were kept unchanged for 648 of 854 reviewed
 event records (75.9%)** in production. Tags were changed for the other 206.
-This tells us how often suggestions were kept, rather than how often a model
-was independently proven right. We have not yet measured time saved.
+This shows how often suggestions were kept. It is not a separate test of model
+accuracy. We have not yet measured time saved.
 
 Read [how DemoLogic helps in practice](https://github.com/demo-radar/demo-radar-logic/blob/main/docs/demo-radar-in-practice.md)
 for the workflow, how these numbers are counted, and links to the research.
