@@ -12,7 +12,8 @@ decide where they want to participate and which areas they would rather avoid.
 
 **[Explore the live application](https://demo-radar.com)** ·
 **[Read the DemoLogic project](https://github.com/demo-radar/demo-radar-logic)** ·
-**[See the architecture](docs/architecture.md)**
+**[See the architecture](docs/architecture.md)** ·
+**[Read the engineering decisions](docs/engineering-decisions.md)**
 
 ## Why I built it
 
@@ -81,8 +82,8 @@ source, not the Demo Radar application.
 
 Application development and deployment remain in a private Gogs repository.
 The frontend/backend implementation, operational configuration and research
-inputs are outside this documentation repository. No application source licence
-or right to reuse private code is granted by this overview.
+inputs are outside this documentation repository. This repository documents
+Demo Radar. The application source remains private and is not included.
 
 ## Limits and next steps
 
@@ -102,5 +103,6 @@ and accessibility, and develop the mobile clients. A future project article can
 explain a real engineering decision in more detail without publishing private
 source or operational information.
 
-**Author: Roy Grossman.** Third-party services and source material retain their
-own rights. Documentation and image permissions are to be agreed before release.
+**Author: Roy Grossman.** Copyright © 2026 Roy Grossman. All rights reserved
+for the original documentation and diagrams. See [copyright and permissions](COPYRIGHT.md).
+Third-party services and source material retain their own rights.
