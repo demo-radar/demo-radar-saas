@@ -6,7 +6,7 @@
 ## From public records to a useful map
 
 ```mermaid
-flowchart LR
+flowchart TB
     Source[Berlin assembly records] --> Backend[Demo Radar backend]
     Mapping[Mapping and routing services] --> Backend
     Backend --> Data[(Event and geospatial data)]

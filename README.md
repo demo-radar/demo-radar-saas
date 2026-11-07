@@ -2,7 +2,8 @@
 
 **Making public information useful in everyday life.**
 
-> Draft for owner review. This documentation repository remains private.
+> This repository is being prepared as a public overview of Demo Radar.
+> It is private while this draft is reviewed. The application source will stay private.
 
 Demo Radar turns Berlin's public demonstration records into a searchable map.
 It helps residents and visitors explore causes, find gatherings, and understand
