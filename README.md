@@ -12,8 +12,7 @@ decide where they want to participate and which areas they would rather avoid.
 
 **[Explore the live application](https://demo-radar.com)** ·
 **[Read the DemoLogic project](https://github.com/demo-radar/demo-radar-logic)** ·
-**[See the architecture](docs/architecture.md)** ·
-**[Read the engineering decisions](docs/engineering-decisions.md)**
+**[See the architecture](docs/architecture.md)**
 
 ## Why I built it
 
@@ -68,9 +67,8 @@ Browsing approved content does not require a new model call.
 - **Handling uncertain failures:** check for a saved answer after a connection
   problem and require an explicit recovery decision when the outcome is unknown.
 
-These are implementation choices, not claims of perfect accuracy or measured
-time savings. The [architecture overview](docs/architecture.md) explains the
-service boundaries and documented hosting setup.
+The [architecture overview](docs/architecture.md) explains the data pipeline,
+service boundaries and the reasons behind these choices.
 
 ## Hosting and source
 
@@ -81,9 +79,8 @@ handles translation. GitHub hosts this documentation and the public DemoLogic
 source, not the Demo Radar application.
 
 Application development and deployment remain in a private Gogs repository.
-The frontend/backend implementation, operational configuration and research
-inputs are outside this documentation repository. This repository documents
-Demo Radar. The application source remains private and is not included.
+The frontend/backend implementation, operational configuration and private
+research inputs are outside this documentation repository.
 
 ## Limits and next steps
 

@@ -1,96 +1,116 @@
 # How Demo Radar fits together
 
-> Draft for owner review. This describes the application; it is not a runnable
-> architecture included in this repository or a fresh audit of production.
+Demo Radar separates the frontend, application backend and AI inference.
+The backend owns the event data and staff workflows. DemoLogic provides AI
+inference through an API. The frontend displays saved information.
 
-## How the application uses stored event data
+## From public records to the map
+
+The data pipeline runs in **batches**: each import fetches the current assembly
+feed, saves changes, then processes locations and routes.
 
 ```mermaid
 flowchart TB
-    Source[Berlin assembly records] --> Import[Import and prepare locations and routes]
-    Mapping[Mapping and routing services] --> Import
-    Import --> Data[(Event and geospatial data)]
-    Data -->|Read selected fields| Jobs[Demo Radar backend jobs]
-    Jobs <-->|Request and result| Logic[DemoLogic AI service]
-    Jobs -->|Save suggestions and drafts| Data
-    Data -->|Read saved work| Staff[Authorized staff review]
-    Staff -->|Save decisions| Data
-    Data -->|Public records and approved content through the API| Public[Public application]
+    Source[Berlin assembly feed] --> Import[Extract, clean and load records]
+    Import --> Records[(Stored source records)]
+    Records --> Enrich[Transform and enrich locations and routes]
+    Mapping[Geocoding and routing services] <-->|Lookups and results| Enrich
+    Enrich --> Geography[(Stored coordinates and route geometry)]
+    Records --> Read[SQL view and backend read API]
+    Geography --> Read
+    Read --> Public[Public application]
 ```
 
-The backend imports public assembly records and prepares their locations and
-available routes. PostgreSQL/PostGIS stores the event and geospatial data;
-Redis provides caching. The application database also holds saved suggestions,
-summary drafts and review decisions. React, TypeScript and Leaflet provide the
-public application: its map, list and published daily briefing. A read API
-serves those screens. Staff actions require authorization.
+The two storage boxes are groups of tables in the **same PostgreSQL/PostGIS
+operational database**. Source records retain the imported event fields;
+separate tables hold geocoding results and routes. The `demos_v` SQL view joins
+those records for the read API. The public application combines the map,
+event list and published daily briefing. Redis caches API responses.
 
-## AI assists a review workflow
+Import performs light field cleanup before saving records: **extract,
+transform, load (ETL)**. Geocoding and route building are separate **post-load
+enrichment** stages. Backend workers read the saved records, resolve their
+locations and routes, and write those results back to the operational database.
 
-1. Demo Radar's backend jobs read eligible stored events and prepare a request.
-2. DemoLogic calls its configured provider and retains results and usage state.
-3. Demo Radar saves the suggestion or draft for staff review.
-4. Staff accept, edit or reject tag suggestions, or review a daily briefing.
-5. Approved content is read from stored data. Eligible saved answers and
-   explicitly approved recurring-event rules can avoid new inference.
+Keeping import and enrichment separate means a delayed mapping service does
+not prevent source updates from being saved. Workers retain results and retry
+state, and staff can correct locations and routes.
 
-DemoLogic does not query the application database directly. Standard tagging
-receives an event ID and title. Daily briefings receive a selected snapshot of
-titles, times, location and route text, and approved tags. The daily snapshot
-does not require map coordinates or computed route geometry. Explicit Gem
-workflows can provide additional event context.
+### What the data terms mean here
 
-Tags and daily briefings have separate review controls. The backend includes
-recorded human edits to finished private briefing drafts before publication.
-DeepL translation is handled by Demo Radar and is distinct from the model
-generation request. Availability of features follows the deployed release.
-
-If a request times out, the remote outcome can be unknown. Recovery first checks
-for the original saved answer. An unresolved outcome requires an explicit
-operator decision rather than an unconditional resend. This reduces ambiguity;
-it does not guarantee provider availability.
-
-## Controls around the workflow
-
-| Responsibility | Where it belongs |
+| Term | Role in Demo Radar |
 | --- | --- |
-| Staff identity and permissions | Demo Radar checks the authenticated session and required role/capability on protected backend actions. |
-| Service access and secrets | Backend-to-DemoLogic requests use a service token. Provider keys stay in private server settings, outside browser code and this repository. |
-| Model configuration | DemoLogic exposes an authenticated task/profile catalog. Each job retains the selected configuration identity. |
-| Recovery and spending | The backend saves requests and outcomes. DemoLogic retains admission, usage, spending and uncertain-outcome state in its persistent journal. |
-| Operations | Prometheus and Grafana show operational measurements. They are distinct from research evaluation and do not establish model correctness. |
+| Batch ingestion | Fetch and process a set of assembly records in one import cycle. |
+| ETL | Extract the feed, clean and map its fields, and load changed source records. |
+| Transformation and enrichment | Normalize addresses, resolve coordinates and turn route text into geometry. |
+| Operational database | Support the running application: events, geometry, corrections, AI results and review decisions. |
+| Read model | The SQL view combines stored source and geographic records into the event representation used by the API. |
 
-These are application responsibilities, not a claim that Demo Radar is a
-general-purpose enterprise AI platform. The [engineering decisions](engineering-decisions.md)
-explain alternatives, evaluation, cost accounting, AI risks and remaining gaps.
+These stages keep the public map and staff workflow up to date.
 
-## Hosting at a glance
+## Where AI fits
 
-| Part | Documented role |
+Demo Radar prepares AI requests from stored events and saves the returned work
+for review. DemoLogic does not query the application database directly.
+
+```mermaid
+flowchart TB
+    Events[(Stored event data)] --> Jobs[Demo Radar backend jobs]
+    Jobs <-->|Request and result| Logic[DemoLogic AI service]
+    Jobs --> Work[(Saved suggestions and review decisions)]
+    Work --> Review[Authorized staff review]
+    Review -->|Accept, edit or reject| Work
+```
+
+- **Topic tagging:** standard requests contain an event ID and title. Staff
+  review the suggested tags before publication.
+- **Daily briefings:** requests contain a selected snapshot of titles, times,
+  location and route text, and approved tags. Computed map geometry is not
+  part of that snapshot. Staff can edit the draft before publishing it.
+- **Additional context:** the manual Gem workflow can include more event
+  information when staff need it.
+
+DeepL handles translations in Demo Radar, separately from generation in
+DemoLogic. The read API serves approved tags and published briefings from
+storage; opening the public application does not trigger inference.
+
+Saved answers can be reused when eligible. Staff can also explicitly approve
+tag reuse for future matching events. This reduces repeated model calls while
+keeping each dated demonstration as a separate event.
+
+If a model request times out, recovery first checks for the original saved
+answer. An unknown outcome pauses new inference until an operator records a
+recovery decision, avoiding an automatic resend of potentially completed work.
+
+## Service boundaries
+
+| Part | Responsibility |
 | --- | --- |
-| Hetzner | Cloud infrastructure for the application; configured model inference is a separate provider service. |
-| Cloudflare | Public entry through the documented Tunnel setup. |
-| Docker | Containerized application and supporting services. |
-| PostgreSQL/PostGIS and Redis | Persistent application/geospatial data and caching. |
-| DemoLogic | Separate AI service with request validation, saved results and recovery state. |
-| DeepL | Translation of demonstration titles and daily briefings. |
-| Prometheus and Grafana | Operational metrics and dashboards; no public dashboard is promised here. |
-| Gogs | Private application development repository. |
-| GitHub | Project documentation and the separately published DemoLogic source. |
+| Frontend | React, TypeScript and Leaflet render the public map, list and briefing, and the staff interface. |
+| Backend | Import and enrich records, serve the API, enforce staff permissions, manage corrections, request AI work and save review decisions. |
+| DemoLogic | Validate inference requests, call the configured model provider, and retain results, usage and recovery state in a persistent journal. |
 
-This is a provider/component-level explanation. Server addresses, credentials,
-private access paths and deployment or recovery commands are not needed to
-understand the project and are excluded. Hosting details should be confirmed
-by the owner before publication; this draft makes no uptime, contractual
-data-residency or security-certification claim.
-
-## What stays outside this repository
-
-- Application and staff-workflow source code.
-- Runtime settings, credentials, operator runbooks and private addresses.
-- Event exports, review notes, account records and private research inputs.
-- The full application Git history and the previous synthetic code showcase.
+Backend requests to DemoLogic use a service token. Provider credentials stay on
+the server. Keeping AI behind its own API lets its models and instructions
+evolve without putting inference into the public page-loading path.
 
 The public [DemoLogic project](https://github.com/demo-radar/demo-radar-logic)
-documents its own implementation, experiments and limitations. Its source
-licence applies there; it does not licence the private Demo Radar application.
+contains its implementation, research methods, results and limitations.
+
+## Hosting and operations
+
+| Component | Role |
+| --- | --- |
+| Hetzner | Application hosting; model inference uses the configured provider service. |
+| Cloudflare Tunnel | Public entry point to the application. |
+| Docker | Run the application and supporting services in containers. |
+| PostgreSQL/PostGIS | Persistent application records and geospatial data. |
+| Redis | Cache API responses. |
+| DeepL | Translate titles and daily briefings. |
+| Prometheus and Grafana | Track service health, jobs, inference usage and operational outcomes. |
+| Gogs | Host the private application repository. |
+| GitHub | Host this project overview and the separate public DemoLogic repository. |
+
+Private settings, server addresses, credentials and operator commands stay
+outside this overview. Operational monitoring helps run the service; the
+DemoLogic research evaluates the quality of its suggestions.
