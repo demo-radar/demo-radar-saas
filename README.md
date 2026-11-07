@@ -72,6 +72,35 @@ the results and provides the staff review and publication workflow. Eligible
 saved answers and explicitly approved tagging rules can be reused for recurring
 events. Browsing approved content does not require a new model call.
 
+This gives me a starting point for choosing tags and writing a daily overview,
+while keeping the review decision with me. Saved answers help avoid asking
+the model to repeat work for matching events.
+
+### Tag review in practice
+
+As of 7 November 2026, **tags were kept unchanged for 648 of 854 reviewed
+event records (75.9%)** in production. Tags were changed for the other 206.
+This shows how often suggestions were kept. It is not a separate test of model
+accuracy. We have not yet measured time saved.
+
+Read [how DemoLogic helps in practice](https://github.com/demo-radar/demo-radar-logic/blob/main/docs/demo-radar-in-practice.md)
+for the workflow, how these numbers are counted, and links to the research.
+
+<details>
+<summary>See the production review dashboard</summary>
+
+![DemoLogic tagging dashboard showing saved review decisions, reused answers and model usage](assets/demo-radar-tagging-grafana.jpg)
+
+*Production snapshot, 7 November 2026. Live jobs from the last 30 days.*
+
+Grafana shows suggestions waiting for review, saved review decisions and reuse
+of earlier answers. The review table shows the 648 records accepted unchanged
+and 206 edited. One group review can cover several events, so the number of
+review actions differs from the number of reviewed records. The green charts
+show requests and known token usage over time.
+
+</details>
+
 ## Engineering behind the map
 
 - **Turning text into geography:** interpret addresses and route descriptions,
