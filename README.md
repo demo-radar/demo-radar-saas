@@ -2,9 +2,6 @@
 
 **Making public information useful in everyday life.**
 
-> This repository is being prepared as a public overview of Demo Radar.
-> It is private while this draft is reviewed. The application source will stay private.
-
 Demo Radar turns Berlin's public demonstration records into a searchable map.
 It helps residents and visitors explore causes, find gatherings, and understand
 their times, locations and reported routes. People can use that information to
@@ -28,7 +25,7 @@ the application.
 
 ## What the application does
 
-| Area | Implemented capability |
+| Area | Capability |
 | --- | --- |
 | Discover events | Search and filter demonstrations by date and topic on a map and in a list. |
 | Understand locations | Show assembly points, clustered markers and available route geometry. |
@@ -37,24 +34,21 @@ the application.
 | Read a daily briefing | Display a reviewed, published briefing when one is available for the selected day. |
 | Maintain the information | Give authorized staff tools to inspect source records, review suggestions and correct locations or routes. |
 
-These are descriptions of the application, not features you can run from this
-repository. This repository contains documentation only. It has no map demo,
-application source, production records or deployment commands.
-
 ## Where DemoLogic fits
 
 **DemoLogic — Figuring out what Berlin's demos have to say, one slogan at a time.**
 
-DemoLogic compares rules, classical text classifiers, neural language models
-and hosted language models. Its service suggests topic tags and drafts daily
-briefings. Demo Radar saves those results and provides the review workflow;
-staff decide what is published. Eligible saved answers and explicitly approved
-tagging rules can be reused for recurring events.
+DemoLogic's research compares rules, classical text classifiers, neural language
+models and hosted language models using reviewed demonstration slogans. It
+measures how often suggestions are correct, which relevant topics they miss,
+and how often a method can offer a suggestion. The
+[research methodology](https://github.com/demo-radar/demo-radar-logic/blob/main/docs/methodology.md)
+explains the comparisons and their limits.
 
-The public [DemoLogic repository](https://github.com/demo-radar/demo-radar-logic)
-contains the service, research methodology, aggregate findings and limitations.
-The application owns event records, permissions, translations and publication.
-Browsing approved content does not require a new model call.
+The service suggests topic tags and drafts daily briefings. Demo Radar saves
+the results and provides the staff review and publication workflow. Eligible
+saved answers and explicitly approved tagging rules can be reused for recurring
+events. Browsing approved content does not require a new model call.
 
 ## Engineering behind the map
 
@@ -70,35 +64,28 @@ Browsing approved content does not require a new model call.
 The [architecture overview](docs/architecture.md) explains the data pipeline,
 service boundaries and the reasons behind these choices.
 
-## Hosting and source
-
-The application is hosted on Hetzner infrastructure. The documented production
-setup uses Cloudflare Tunnel for the public entry point and Docker for the
-application services. DemoLogic calls the configured model provider; DeepL
-handles translation. GitHub hosts this documentation and the public DemoLogic
-source, not the Demo Radar application.
-
-Application development and deployment remain in a private Gogs repository.
-The frontend/backend implementation, operational configuration and private
-research inputs are outside this documentation repository.
-
-## Limits and next steps
+## Data and interpretation
 
 Demo Radar is an independent project. It uses demonstration records published
 by Berlin's assembly authority; it is not an official authority channel.
-Source information and map geometry can be incomplete, delayed or incorrect.
-Topic tags describe a demonstration's subject, not individual participants'
-beliefs, and do not verify claims made in a slogan.
+Records and routes can change or contain errors. Topic tags describe the
+subject of a demonstration; claims in slogans remain the organizers' claims.
+Reported routes do not confirm road closures or safety conditions.
 
-A reported route is not confirmation of a road closure, crowd size or safety
-condition. Automated disruption alerts, expansion to other cities, and measured
-reductions in staff effort are development or evaluation goals, not established
-outcomes. This overview does not assert legal or accessibility certification.
+## What's next
 
-Next, I want to learn from residents and civic organizations, evaluate usability
-and accessibility, and develop the mobile clients. A future project article can
-explain a real engineering decision in more detail without publishing private
-source or operational information.
+I want to learn from residents and civic organizations, evaluate usability and
+accessibility, measure the staff effort needed to review suggestions, and
+develop the mobile clients. Potential travel-disruption information and
+expansion to other cities are longer-term directions.
+
+## About this repository
+
+This repository contains Demo Radar's project overview and architecture.
+The application runs in Docker on Hetzner, with Cloudflare Tunnel as its public
+entry point. Application source and deployment configuration stay in a private
+Gogs repository; the [DemoLogic source](https://github.com/demo-radar/demo-radar-logic)
+is public.
 
 **Author: Roy Grossman.** Copyright © 2026 Roy Grossman. All rights reserved
 for the original documentation and diagrams. See [copyright and permissions](COPYRIGHT.md).

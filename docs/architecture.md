@@ -36,18 +36,6 @@ Keeping import and enrichment separate means a delayed mapping service does
 not prevent source updates from being saved. Workers retain results and retry
 state, and staff can correct locations and routes.
 
-### What the data terms mean here
-
-| Term | Role in Demo Radar |
-| --- | --- |
-| Batch ingestion | Fetch and process a set of assembly records in one import cycle. |
-| ETL | Extract the feed, clean and map its fields, and load changed source records. |
-| Transformation and enrichment | Normalize addresses, resolve coordinates and turn route text into geometry. |
-| Operational database | Support the running application: events, geometry, corrections, AI results and review decisions. |
-| Read model | The SQL view combines stored source and geographic records into the event representation used by the API. |
-
-These stages keep the public map and staff workflow up to date.
-
 ## Where AI fits
 
 Demo Radar prepares AI requests from stored events and saves the returned work
@@ -67,8 +55,12 @@ flowchart TB
 - **Daily briefings:** requests contain a selected snapshot of titles, times,
   location and route text, and approved tags. Computed map geometry is not
   part of that snapshot. Staff can edit the draft before publishing it.
-- **Additional context:** the manual Gem workflow can include more event
-  information when staff need it.
+- **Additional context:** staff can prepare a manual tagging request with
+  additional event information through the Gem workflow.
+
+Prompts distinguish source fields from instructions. The service validates tag
+names and response structure. Staff check the interpretation of the slogan and
+the content of the briefing before publication.
 
 DeepL handles translations in Demo Radar, separately from generation in
 DemoLogic. The read API serves approved tags and published briefings from
@@ -94,8 +86,22 @@ Backend requests to DemoLogic use a service token. Provider credentials stay on
 the server. Keeping AI behind its own API lets its models and instructions
 evolve without putting inference into the public page-loading path.
 
-The public [DemoLogic project](https://github.com/demo-radar/demo-radar-logic)
-contains its implementation, research methods, results and limitations.
+## Access, usage and evaluation
+
+| Area | How it works |
+| --- | --- |
+| Staff access | Protected backend actions check the staff session and role capabilities. Admin capabilities control pipeline management and approval of future tag reuse. |
+| AI configuration | DemoLogic exposes an authenticated catalog of supported tasks and profiles. Jobs retain the selected profile identity and configuration hash so a retry uses the same configuration. |
+| Usage and cost | Attempts retain provider/model identity, token counts and timings. For paid calls, DemoLogic reserves an amount against configured spending limits before dispatch and estimates model cost from returned token counts and the recorded pricing policy. Unknown usage keeps its reservation pending reconciliation. |
+| Monitoring | Prometheus and Grafana track service health, job outcomes, inference timings and usage. Saved provider measurements support cost reconciliation. |
+
+Model quality is evaluated against reviewed reference tags, using precision,
+recall and suggestion coverage. Recurring titles are grouped when splitting
+the research data to reduce overlap between training and test cases.
+The [research methodology](https://github.com/demo-radar/demo-radar-logic/blob/main/docs/methodology.md)
+and [results](https://github.com/demo-radar/demo-radar-logic#what-the-research-found)
+describe the evidence. CI checks API behavior and recovery with synthetic
+inputs; the reviewed research comparisons assess the meaning of suggestions.
 
 ## Hosting and operations
 
@@ -110,7 +116,3 @@ contains its implementation, research methods, results and limitations.
 | Prometheus and Grafana | Track service health, jobs, inference usage and operational outcomes. |
 | Gogs | Host the private application repository. |
 | GitHub | Host this project overview and the separate public DemoLogic repository. |
-
-Private settings, server addresses, credentials and operator commands stay
-outside this overview. Operational monitoring helps run the service; the
-DemoLogic research evaluates the quality of its suggestions.
