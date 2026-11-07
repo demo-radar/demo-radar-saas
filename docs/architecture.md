@@ -52,9 +52,8 @@ flowchart TB
 
 - **Topic tagging:** standard requests contain an event ID and title. Staff
   review the suggested tags before publication.
-- **Daily briefings:** requests contain a selected snapshot of titles, times,
-  location and route text, and approved tags. Computed map geometry is not
-  part of that snapshot. Staff can edit the draft before publishing it.
+- **Daily briefings:** the backend builds a snapshot of the selected day's
+  titles, times, location and route text, and approved tags for generation.
 - **Additional context:** staff can prepare a manual tagging request with
   additional event information through the Gem workflow.
 
@@ -73,6 +72,19 @@ keeping each dated demonstration as a separate event.
 If a model request times out, recovery first checks for the original saved
 answer. An unknown outcome pauses new inference until an operator records a
 recovery decision, avoiding an automatic resend of potentially completed work.
+
+### Daily briefing: from snapshot to publication
+
+DemoLogic generates one German draft from the daily snapshot. The backend
+translates it into English with DeepL and stores both versions as private
+drafts. The snapshot contains source text and approved tags; computed map
+geometry is kept in the application's mapping workflow.
+
+An admin reviews both languages against the source records, can edit the
+briefing, and publishes the approved versions. The application records whether
+the text was edited by a person. The newspaper button in the public top bar
+loads the saved publication for the selected date, with its AI/review label.
+The briefing covers that day's snapshot independently of map and topic filters.
 
 ## Service boundaries
 

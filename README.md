@@ -31,8 +31,21 @@ the application.
 | Understand locations | Show assembly points, clustered markers and available route geometry. |
 | Read across languages | Offer German/English interface text and DeepL translations of titles and daily briefings. |
 | Explore topics | Show saved topic tags, with AI suggestions subject to staff approval. |
-| Read a daily briefing | Display a reviewed, published briefing when one is available for the selected day. |
+| Read a daily AI briefing | Get a reviewed German/English overview of the selected day's demonstrations, main themes and a featured event. |
 | Maintain the information | Give authorized staff tools to inspect source records, review suggestions and correct locations or routes. |
+
+## The daily AI briefing
+
+The newspaper button in the map's top bar opens a short briefing for the
+selected day. It brings together the number of demonstrations in the saved
+feed, their main themes and an event in focus. A **Getting around** section
+highlights available route information to help readers orient themselves.
+
+DemoLogic drafts the briefing in German from the day's stored public records.
+Demo Radar translates it into English with DeepL. An admin reviews both
+versions and can edit the text before publication. Readers see the saved,
+published briefing, clearly labeled as AI-generated and reviewed, or AI-assisted
+and edited. Opening it does not trigger another model call.
 
 ## Where DemoLogic fits
 
@@ -78,6 +91,17 @@ I want to learn from residents and civic organizations, evaluate usability and
 accessibility, measure the staff effort needed to review suggestions, and
 develop the mobile clients. Potential travel-disruption information and
 expansion to other cities are longer-term directions.
+
+## Other projects
+
+Other services, including [POLIZEI STRESSI](https://polizeistressi.de/), also
+make public demonstration records easier to explore. I appreciate the people
+building and maintaining these services and making civic information more
+visible.
+
+Demo Radar is my approach to that shared goal: bringing map-based discovery,
+route visualization, multilingual access, reviewed topic tags and daily AI
+briefings together in one application.
 
 ## About this repository
 
