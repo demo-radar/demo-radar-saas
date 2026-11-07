@@ -94,14 +94,13 @@ expansion to other cities are longer-term directions.
 
 ## Other projects
 
-Other services, including [POLIZEI STRESSI](https://polizeistressi.de/), also
-make public demonstration records easier to explore. I appreciate the people
-building and maintaining these services and making civic information more
-visible.
+Other websites and apps also help people discover demonstrations and make
+civic information more visible. I appreciate the people building and
+maintaining these services.
 
-Demo Radar is my approach to that shared goal: bringing map-based discovery,
-route visualization, multilingual access, reviewed topic tags and daily AI
-briefings together in one application.
+Demo Radar is an independent project and is not affiliated with those services.
+My approach brings map-based discovery, route visualization, multilingual
+access, reviewed topic tags and daily AI briefings together in one application.
 
 ## About this repository
 
