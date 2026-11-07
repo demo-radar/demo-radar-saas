@@ -72,6 +72,24 @@ the results and provides the staff review and publication workflow. Eligible
 saved answers and explicitly approved tagging rules can be reused for recurring
 events. Browsing approved content does not require a new model call.
 
+This helps me review topics consistently, avoid repeating eligible model
+requests, and prepare a daily overview for readers in German and English. New
+suggestions and briefings go through review before publication.
+
+### Tag review in practice
+
+In production, **648 of 854 reviewed event items (75.9%) were accepted
+unchanged** as of 7 November 2026, 23:14 Berlin time. The other 206 were edited;
+no rejections were recorded. These are saved reviews of live Hetzner model
+results from 13 October to 7 November, counted per event item. A group review
+can cover several items; automatic application of approved recurring rules is
+excluded. This is a review outcome, not an independent accuracy score. Staff
+time saved has not been reliably measured.
+
+See DemoLogic's [research methodology](https://github.com/demo-radar/demo-radar-logic/blob/main/docs/methodology.md)
+and [results](https://github.com/demo-radar/demo-radar-logic#what-the-research-found)
+for the separate benchmark and its limitations.
+
 ## Engineering behind the map
 
 - **Turning text into geography:** interpret addresses and route descriptions,
